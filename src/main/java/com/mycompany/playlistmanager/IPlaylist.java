@@ -1,6 +1,6 @@
 package com.mycompany.playlistmanager;
 
-import scala.collection.immutable.Vector;
+import java.util.Vector;
 
 public abstract interface IPlaylist {
 
@@ -8,7 +8,7 @@ public abstract interface IPlaylist {
     public String getPlaylistID();
     public boolean addSong(Song newSong);
     public boolean removeSong(int position);
-    public Vector<String> getSongList();
+    public Vector<Song> getSongList();
     public boolean convertSongs();
     
 }

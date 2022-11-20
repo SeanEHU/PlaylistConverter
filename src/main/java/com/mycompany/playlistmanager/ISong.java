@@ -7,6 +7,5 @@ public abstract interface ISong {
     public int getLength();
     public String getAlbum();
     public int getTrackNum();
-    public boolean convertSong();
 
 }

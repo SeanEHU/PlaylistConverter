@@ -1,6 +1,6 @@
 package com.mycompany.playlistmanager;
 
-import scala.collection.immutable.Vector;
+import java.util.Vector;
 
 public class Playlist implements IPlaylist {
 
@@ -31,9 +31,9 @@ public class Playlist implements IPlaylist {
     }
 
     @Override
-    public Vector<String> getSongList() {
+    public Vector<Song> getSongList() {
         // TODO Auto-generated method stub
-        return null;
+        return this.songList;
     }
 
     @Override

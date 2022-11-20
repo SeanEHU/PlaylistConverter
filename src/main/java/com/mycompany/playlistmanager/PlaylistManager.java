@@ -7,7 +7,7 @@ package com.mycompany.playlistmanager;
 
 /**
  *
- * @author seand
+ * @author Sean Johnson
  */
 public class PlaylistManager {
 
