@@ -1,10 +1,14 @@
 package com.mycompany.playlistmanager;
 
-interface IPlaylist {
+import scala.collection.immutable.Vector;
+
+public abstract interface IPlaylist {
 
     public String getName();
     public String getPlaylistID();
-    public boolean addSong();
-    public boolean removeSong();
+    public boolean addSong(Song newSong);
+    public boolean removeSong(int position);
+    public Vector<String> getSongList();
+    public boolean convertSongs();
     
 }
