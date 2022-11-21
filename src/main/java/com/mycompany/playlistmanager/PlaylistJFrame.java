@@ -4,11 +4,18 @@
  */
 package com.mycompany.playlistmanager;
 
+import java.util.Vector;
+
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author seand
  */
 public class PlaylistJFrame extends javax.swing.JFrame {
+
+    private String[] playlistTblHeads = {"Title", "Arist", "Length"};
+    private DefaultTableModel tblMdlPlaylist = new DefaultTableModel(playlistTblHeads, 0);
 
     /**
      * Creates new form PlaylistJFrame
@@ -41,17 +48,7 @@ public class PlaylistJFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        tblPlaylist.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
+        tblPlaylist.setModel(this.tblMdlPlaylist);
         jScrollPane1.setViewportView(tblPlaylist);
 
         javax.swing.GroupLayout panPlaylistLayout = new javax.swing.GroupLayout(panPlaylist);

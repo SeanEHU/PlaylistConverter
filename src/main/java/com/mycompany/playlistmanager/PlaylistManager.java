@@ -11,7 +11,10 @@ package com.mycompany.playlistmanager;
  */
 public class PlaylistManager {
 
+    static PlaylistJFrame g;
+
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        g = new PlaylistJFrame();
+        g.setVisible(true);
     }
 }
