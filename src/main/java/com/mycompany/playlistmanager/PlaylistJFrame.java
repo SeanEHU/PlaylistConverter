@@ -22,6 +22,8 @@ public class PlaylistJFrame extends javax.swing.JFrame {
      */
     public PlaylistJFrame() {
         initComponents();
+        
+
     }
 
     /**
@@ -34,16 +36,23 @@ public class PlaylistJFrame extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jOptionPane = new javax.swing.JOptionPane();
         panPlaylist = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPlaylist = new javax.swing.JTable();
+        lblPlaylistName = new javax.swing.JLabel();
         panConvert = new javax.swing.JPanel();
         cmbConvert = new javax.swing.JComboBox<>();
         btnConvert = new javax.swing.JButton();
         progConvert = new javax.swing.JProgressBar();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
+        menuINew = new javax.swing.JMenuItem();
+        menuIOpen = new javax.swing.JMenuItem();
+        menuISave = new javax.swing.JMenuItem();
+        menuISaveAs = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
+        menuIAddSong = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new java.awt.GridBagLayout());
@@ -51,20 +60,28 @@ public class PlaylistJFrame extends javax.swing.JFrame {
         tblPlaylist.setModel(this.tblMdlPlaylist);
         jScrollPane1.setViewportView(tblPlaylist);
 
+        lblPlaylistName.setText(". . .");
+
         javax.swing.GroupLayout panPlaylistLayout = new javax.swing.GroupLayout(panPlaylist);
         panPlaylist.setLayout(panPlaylistLayout);
         panPlaylistLayout.setHorizontalGroup(
             panPlaylistLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panPlaylistLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 578, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(panPlaylistLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panPlaylistLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panPlaylistLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 578, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblPlaylistName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         panPlaylistLayout.setVerticalGroup(
             panPlaylistLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panPlaylistLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 422, Short.MAX_VALUE))
+                .addContainerGap(11, Short.MAX_VALUE)
+                .addComponent(lblPlaylistName)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -104,15 +121,45 @@ public class PlaylistJFrame extends javax.swing.JFrame {
         getContentPane().add(panConvert, gridBagConstraints);
 
         fileMenu.setText("File");
+
+        menuINew.setText("New Playlist");
+        menuINew.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuINewActionPerformed(evt);
+            }
+        });
+        fileMenu.add(menuINew);
+
+        menuIOpen.setText("Open");
+        fileMenu.add(menuIOpen);
+
+        menuISave.setText("Save");
+        fileMenu.add(menuISave);
+
+        menuISaveAs.setText("Save As");
+        fileMenu.add(menuISaveAs);
+
         menuBar.add(fileMenu);
 
         editMenu.setText("Edit");
+
+        menuIAddSong.setText("Add Song");
+        editMenu.add(menuIAddSong);
+
         menuBar.add(editMenu);
 
         setJMenuBar(menuBar);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void menuINewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuINewActionPerformed
+        
+        String nameIn = jOptionPane.showInputDialog(null, "Enter playlist name: ");
+        
+        PlaylistManager.currentPlaylist = new Playlist("Name");
+        lblPlaylistName.setText(nameIn);
+    }//GEN-LAST:event_menuINewActionPerformed
 
     /**
      * @param args the command line arguments
@@ -154,8 +201,15 @@ public class PlaylistJFrame extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cmbConvert;
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenu fileMenu;
+    private javax.swing.JOptionPane jOptionPane;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblPlaylistName;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenuItem menuIAddSong;
+    private javax.swing.JMenuItem menuINew;
+    private javax.swing.JMenuItem menuIOpen;
+    private javax.swing.JMenuItem menuISave;
+    private javax.swing.JMenuItem menuISaveAs;
     private javax.swing.JPanel panConvert;
     private javax.swing.JPanel panPlaylist;
     private javax.swing.JProgressBar progConvert;
