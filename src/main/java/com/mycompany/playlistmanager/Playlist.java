@@ -33,8 +33,15 @@ public class Playlist implements IPlaylist {
 
     @Override
     public boolean addSong(Song nSong) {
-        // TODO Auto-generated method stub
+
+        try {
         this.songList.add(nSong);
+        return true;
+        }
+        catch(Exception e){
+            return false;
+        }
+        
     }
 
     @Override

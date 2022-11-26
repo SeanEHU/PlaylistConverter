@@ -6,6 +6,7 @@ package com.mycompany.playlistmanager;
 
 import java.util.Vector;
 
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -22,8 +23,6 @@ public class PlaylistJFrame extends javax.swing.JFrame {
      */
     public PlaylistJFrame() {
         initComponents();
-        
-
     }
 
     /**
@@ -155,11 +154,17 @@ public class PlaylistJFrame extends javax.swing.JFrame {
 
     private void menuINewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuINewActionPerformed
         
-        String nameIn = jOptionPane.showInputDialog(null, "Enter playlist name: ");
+        String nameIn = JOptionPane.showInputDialog(null, "Enter playlist name: ");
         
         PlaylistManager.currentPlaylist = new Playlist("Name");
         lblPlaylistName.setText(nameIn);
     }//GEN-LAST:event_menuINewActionPerformed
+
+    private void menuIAddSongActionPerformed(java.awt.event.ActionEvent evt) {
+
+        
+
+    }
 
     /**
      * @param args the command line arguments
@@ -201,7 +206,6 @@ public class PlaylistJFrame extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cmbConvert;
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenu fileMenu;
-    private javax.swing.JOptionPane jOptionPane;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblPlaylistName;
     private javax.swing.JMenuBar menuBar;
