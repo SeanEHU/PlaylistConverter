@@ -7,6 +7,19 @@ public class Playlist implements IPlaylist {
     private String name;
     private Vector<Song> songList;
 
+    public Playlist(String nName, Vector<Song> nSongList){
+        
+        this.name = nName;
+        this.songList = nSongList;
+        
+    }
+    
+    public Playlist(String nName) {
+        
+        this.name = nName;
+        
+    }
+    
     @Override
     public String getName() {
         return this.name;
@@ -19,9 +32,9 @@ public class Playlist implements IPlaylist {
     }
 
     @Override
-    public boolean addSong(Song newSong) {
+    public boolean addSong(Song nSong) {
         // TODO Auto-generated method stub
-        return false;
+        this.songList.add(nSong);
     }
 
     @Override
@@ -42,6 +55,5 @@ public class Playlist implements IPlaylist {
         return false;
     }
     
-
 
 }
