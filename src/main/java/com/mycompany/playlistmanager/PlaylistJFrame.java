@@ -35,7 +35,6 @@ public class PlaylistJFrame extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jOptionPane = new javax.swing.JOptionPane();
         panPlaylist = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPlaylist = new javax.swing.JTable();
@@ -162,7 +161,6 @@ public class PlaylistJFrame extends javax.swing.JFrame {
 
     private void menuIAddSongActionPerformed(java.awt.event.ActionEvent evt) {
 
-        
 
     }
 

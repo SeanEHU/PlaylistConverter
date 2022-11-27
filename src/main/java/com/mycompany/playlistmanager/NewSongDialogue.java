@@ -5,6 +5,8 @@
  */
 package com.mycompany.playlistmanager;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author seand
@@ -28,21 +30,129 @@ public class NewSongDialogue extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        lblTrackNum = new javax.swing.JLabel();
+        lblTitle = new javax.swing.JLabel();
+        lblArtist = new javax.swing.JLabel();
+        lblAlbum = new javax.swing.JLabel();
+        textTitle = new javax.swing.JTextField();
+        textArtist = new javax.swing.JTextField();
+        textAlbum = new javax.swing.JTextField();
+        lblSecs = new javax.swing.JLabel();
+        lblTrackLen = new javax.swing.JLabel();
+        lblMins = new javax.swing.JLabel();
+        ftextSecs = new javax.swing.JFormattedTextField();
+        ftextMins = new javax.swing.JFormattedTextField();
+        lblHeading = new javax.swing.JLabel();
+        lblSubHeading = new javax.swing.JLabel();
+        btnSubmit = new javax.swing.JButton();
+        btnCancel = new javax.swing.JButton();
+        ftextTrackNum = new javax.swing.JFormattedTextField();
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lblTrackNum.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        lblTrackNum.setText("*Track Number");
+        getContentPane().add(lblTrackNum, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 90, -1));
+
+        lblTitle.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        lblTitle.setText("Title");
+        getContentPane().add(lblTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 90, -1));
+
+        lblArtist.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        lblArtist.setText("Artist");
+        getContentPane().add(lblArtist, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 90, -1));
+
+        lblAlbum.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        lblAlbum.setText("*Album");
+        getContentPane().add(lblAlbum, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 90, -1));
+        getContentPane().add(textTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 60, 140, -1));
+        getContentPane().add(textArtist, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 80, 140, -1));
+        getContentPane().add(textAlbum, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 100, 140, -1));
+
+        lblSecs.setText("Seconds");
+        getContentPane().add(lblSecs, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 150, -1, -1));
+
+        lblTrackLen.setText("*Track Length");
+        getContentPane().add(lblTrackLen, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 170, -1, -1));
+
+        lblMins.setText("Minutes");
+        getContentPane().add(lblMins, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 150, -1, -1));
+
+        ftextSecs.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
+        ftextSecs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ftextSecsActionPerformed(evt);
+            }
+        });
+        getContentPane().add(ftextSecs, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 170, 60, -1));
+
+        ftextMins.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
+        ftextMins.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ftextMinsActionPerformed(evt);
+            }
+        });
+        getContentPane().add(ftextMins, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 170, 60, -1));
+
+        lblHeading.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblHeading.setText("Input Song Details");
+        getContentPane().add(lblHeading, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, -1, -1));
+
+        lblSubHeading.setText("Fields marked with an \"*\" are not required");
+        getContentPane().add(lblSubHeading, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, -1, -1));
+
+        btnSubmit.setText("Submit");
+        btnSubmit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubmitActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnSubmit, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 210, -1, -1));
+
+        btnCancel.setText("Cancel");
+        getContentPane().add(btnCancel, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 210, -1, -1));
+
+        ftextTrackNum.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
+        getContentPane().add(ftextTrackNum, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 120, 140, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void ftextSecsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ftextSecsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ftextSecsActionPerformed
+
+    private void ftextMinsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ftextMinsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ftextMinsActionPerformed
+
+    private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
+        // TODO add your handling code here:
+        String nTitle = null;
+        String nArtist = null;
+        String nAlbum = null;
+        String nTrack = null;
+        String nLength = null;
+
+        if (textTitle.getText().equals("") || textArtist.getText().equals("")) {
+
+            JOptionPane.showMessageDialog(null, "Please input a Title and Artist");
+
+        }  
+        else{
+            nTitle = textTitle.getText();
+            nArtist = textArtist.getText();
+            
+            if (!textAlbum.getText().equals("")){
+                nAlbum = textAlbum.getText()
+            }
+
+            if (!ftextTrackNum.getText().equals("")){
+                
+            }
+        }
+    }//GEN-LAST:event_btnSubmitActionPerformed
 
     /**
      * @param args the command line arguments
@@ -87,5 +197,22 @@ public class NewSongDialogue extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnSubmit;
+    private javax.swing.JFormattedTextField ftextMins;
+    private javax.swing.JFormattedTextField ftextSecs;
+    private javax.swing.JFormattedTextField ftextTrackNum;
+    private javax.swing.JLabel lblAlbum;
+    private javax.swing.JLabel lblArtist;
+    private javax.swing.JLabel lblHeading;
+    private javax.swing.JLabel lblMins;
+    private javax.swing.JLabel lblSecs;
+    private javax.swing.JLabel lblSubHeading;
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JLabel lblTrackLen;
+    private javax.swing.JLabel lblTrackNum;
+    private javax.swing.JTextField textAlbum;
+    private javax.swing.JTextField textArtist;
+    private javax.swing.JTextField textTitle;
     // End of variables declaration//GEN-END:variables
 }
