@@ -4,6 +4,7 @@ import java.util.Vector;
 
 public abstract interface IPlaylist {
 
+    public void setName(String nName);
     public String getName();
     public String getPlaylistID();
     public boolean addSong(Song newSong);

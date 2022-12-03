@@ -12,12 +12,10 @@ package com.mycompany.playlistmanager;
 public class PlaylistManager {
 
     static PlaylistJFrame g;
-    protected static Playlist currentPlaylist;
 
     public static void main(String[] args) {
         g = new PlaylistJFrame();
         g.setVisible(true);
     }
 
-    
 }

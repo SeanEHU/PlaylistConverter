@@ -5,7 +5,7 @@ import java.util.Vector;
 public class Playlist implements IPlaylist {
 
     private String name;
-    private Vector<Song> songList;
+    private Vector<Song> songList = new Vector<Song>(0);
 
     public Playlist(String nName, Vector<Song> nSongList){
         
@@ -19,7 +19,13 @@ public class Playlist implements IPlaylist {
         this.name = nName;
         
     }
-    
+
+    @Override
+    public void setName(String nName) {
+        this.name = nName;
+        
+    }
+
     @Override
     public String getName() {
         return this.name;
@@ -34,33 +40,30 @@ public class Playlist implements IPlaylist {
     @Override
     public boolean addSong(Song nSong) {
 
-        try {
-        this.songList.add(nSong);
+        this.songList.addElement(nSong);
         return true;
-        }
-        catch(Exception e){
-            return false;
-        }
         
     }
 
     @Override
     public boolean removeSong(int position) {
-        // TODO Auto-generated method stub
+
         return false;
     }
 
     @Override
     public Vector<Song> getSongList() {
-        // TODO Auto-generated method stub
+
         return this.songList;
     }
 
     @Override
     public boolean convertSongs() {
-        // TODO Auto-generated method stub
+
         return false;
     }
+
+    
     
 
 }

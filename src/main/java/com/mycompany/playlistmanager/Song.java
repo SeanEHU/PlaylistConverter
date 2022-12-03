@@ -8,7 +8,7 @@ public class Song implements ISong {
     private int trackNum; //(non essential) The position of this song on its album i.e. 1
     private int length; //(non essential) The Length of the track in seconds i.e. "175"
 
-    public Song(String nTitle, String nArtist, int nTrackNum, String nAlbum, int nLength){
+    public Song(String nTitle, String nArtist, String nAlbum, int nTrackNum, int nLength){
 
         this.title = nTitle;
         this.artist = nArtist;
@@ -29,31 +29,31 @@ public class Song implements ISong {
 
     @Override
     public String getTitle() {
-        // TODO Auto-generated method stub
+
         return this.title;
     }
 
     @Override
     public String getArtist() {
-        // TODO Auto-generated method stub
+
         return this.artist;
     }
 
     @Override
     public int getLength() {
-        // TODO Auto-generated method stub
+
         return this.length;
     }
 
     @Override
     public String getAlbum() {
-        // TODO Auto-generated method stub
+
         return this.album;
     }
 
     @Override
     public int getTrackNum() {
-        // TODO Auto-generated method stub
+
         return this.trackNum;
     }
 
