@@ -221,7 +221,12 @@ public class PlaylistJFrame extends javax.swing.JFrame {
     }                                            
     
     private void menuISaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuISaveActionPerformed
-        this.savePlaylist(currentPlaylistFile);
+        if (this.currentPlaylistFile == null){
+            this.savePlaylist();
+        }
+        else {
+            this.savePlaylist(currentPlaylistFile);
+        }
     }//GEN-LAST:event_menuISaveActionPerformed
 
     private void menuISaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuISaveAsActionPerformed
@@ -511,6 +516,8 @@ public class PlaylistJFrame extends javax.swing.JFrame {
                 playlistWriter.write(songData.toString());
             
                 playlistWriter.close();
+
+                this.currentPlaylistFile = playlistFile;
             }
             catch (IOException e) {
                 JOptionPane.showMessageDialog(null,"Error when writing file.");
