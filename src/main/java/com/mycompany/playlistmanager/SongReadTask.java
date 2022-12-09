@@ -1,9 +1,14 @@
 package com.mycompany.playlistmanager;
 
+/**
+ * A thread for processing a single string into a Song object
+ * @author Sean Johnson
+ */
 public class SongReadTask implements Runnable {
 
     private String songData;
     private Song builtSong;
+
 
     public SongReadTask(String nSongData) {
 

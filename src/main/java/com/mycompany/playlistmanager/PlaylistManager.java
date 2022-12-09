@@ -7,7 +7,17 @@ package com.mycompany.playlistmanager;
 
 /**
  *
+ <h1>Playlist Converter</h1>
+ * 
+ * <p>The playlist converter is used to convert Playlists from one 
+ * streaming serice, to another. For example, taking a playliust from
+ * Spotify and exporting it to Apple Music</p>
+ * 
+ * <p>This project is still a prototpe and does not have this functionality yet.
+ * Currently it can manage an abstract playlist file, that will later be used as a intermediary</p>
+ * 
  * @author Sean Johnson
+ * @link https://github.com/SomeGuyEatingPie/PlaylistConverter
  */
 public class PlaylistManager {
 

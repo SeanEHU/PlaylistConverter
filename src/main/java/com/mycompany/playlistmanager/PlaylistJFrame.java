@@ -8,12 +8,14 @@ import java.util.ArrayList;
 import java.util.Vector;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import javax.rmi.ssl.SslRMIClientSocketFactory;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -21,13 +23,13 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
- *
- * @author seand
+ * The programs's GUI
+ * @author Sean Johnson
  */
 public class PlaylistJFrame extends javax.swing.JFrame {
 
 
-    private static String[] playlistTblHeads = {"Title", "Artist", "Album", "Track Number", "Length"};
+    private static String[] playlistTblHeads = {"#", "Title", "Artist", "Album", "Track Number", "Length"};
     private DefaultTableModel tblMdlPlaylist = new DefaultTableModel(playlistTblHeads, 0);
     private Playlist currentPlaylist;
     private File currentPlaylistFile;
@@ -66,12 +68,18 @@ public class PlaylistJFrame extends javax.swing.JFrame {
         menuISaveAs = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
         menuIAddSong = new javax.swing.JMenuItem();
+        menuDeleteSong = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Playlist Converter");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         tblPlaylist.setModel(this.tblMdlPlaylist);
+        tblPlaylist.setColumnSelectionAllowed(true);
+        tblPlaylist.setShowGrid(false);
+        tblPlaylist.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tblPlaylist);
+        tblPlaylist.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         lblPlaylistName.setText(". . .");
 
@@ -135,6 +143,7 @@ public class PlaylistJFrame extends javax.swing.JFrame {
 
         fileMenu.setText("File");
 
+        menuINew.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
         menuINew.setText("New Playlist");
         menuINew.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -143,6 +152,7 @@ public class PlaylistJFrame extends javax.swing.JFrame {
         });
         fileMenu.add(menuINew);
 
+        menuIOpen.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
         menuIOpen.setText("Open");
         menuIOpen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -151,6 +161,7 @@ public class PlaylistJFrame extends javax.swing.JFrame {
         });
         fileMenu.add(menuIOpen);
 
+        menuISave.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         menuISave.setText("Save");
         menuISave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -159,6 +170,7 @@ public class PlaylistJFrame extends javax.swing.JFrame {
         });
         fileMenu.add(menuISave);
 
+        menuISaveAs.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
         menuISaveAs.setText("Save As");
         menuISaveAs.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -179,6 +191,14 @@ public class PlaylistJFrame extends javax.swing.JFrame {
         });
         editMenu.add(menuIAddSong);
 
+        menuDeleteSong.setText("Delete Song");
+        menuDeleteSong.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuDeleteSongActionPerformed(evt);
+            }
+        });
+        editMenu.add(menuDeleteSong);
+
         menuBar.add(editMenu);
 
         setJMenuBar(menuBar);
@@ -190,12 +210,12 @@ public class PlaylistJFrame extends javax.swing.JFrame {
         
         String nameIn = JOptionPane.showInputDialog(null, "Enter playlist name: ");
 
-        this.displayNewPlaylist(new Playlist(nameIn));
+        this.setNewPlaylist(new Playlist(nameIn));
         
         
     }//GEN-LAST:event_menuINewActionPerformed
 
-    private void menuIAddSongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuIAddSongActionPerformed
+    private void menuIAddSongActionPerformed(java.awt.event.ActionEvent evt) {                                             
 
         this.addSong();
     }                                            
@@ -205,16 +225,23 @@ public class PlaylistJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_menuISaveActionPerformed
 
     private void menuISaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuISaveAsActionPerformed
-        this.savePlaylistAs();
+        this.savePlaylist();
     }//GEN-LAST:event_menuISaveAsActionPerformed
 
     private void menuIOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuIOpenActionPerformed
         this.openPlaylist();
     }//GEN-LAST:event_menuIOpenActionPerformed
 
+    private void menuDeleteSongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuDeleteSongActionPerformed
+        this.deleteSong();
+    }//GEN-LAST:event_menuDeleteSongActionPerformed
 
 
-    private void displayNewPlaylist(Playlist nPlaylist){
+    /**
+     * Called when a new playlist is opened
+     * replaces 
+     */
+    private void setNewPlaylist(Playlist nPlaylist){
 
         this.currentPlaylist = nPlaylist;
         lblPlaylistName.setText(nPlaylist.getName());
@@ -223,103 +250,164 @@ public class PlaylistJFrame extends javax.swing.JFrame {
 
     }
 
+    /**
+     * called to append a song to the playlist
+     */
     private void addSong(){
 
-        String nTitle = null;
-        String nArtist = null;
-        String nAlbum = null;
-        int nTrack = -1;
-        int nLength = -1;
-        boolean success = true;
-        boolean cancel = false;
+        if (this.currentPlaylist != null){
+            String nTitle = null;
+            String nArtist = null;
+            String nAlbum = null;
+            int nTrack = -1;
+            int nLength = -1;
+            boolean success = true;
+            boolean cancel = false;
 
-        JTextField textTitle = new JTextField();
-        JTextField textArtist = new JTextField();
-        JTextField textAlbum = new JTextField();
-        JTextField textTrack = new JTextField();
-        JTextField textLengthMin = new JTextField();
-        JTextField textLengthSec = new JTextField();
+            /* Create the fields for a user to input song details */
+            JTextField textTitle = new JTextField();
+            JTextField textArtist = new JTextField();
+            JTextField textAlbum = new JTextField();
+            JTextField textTrack = new JTextField();
+            JTextField textLengthMin = new JTextField();
+            JTextField textLengthSec = new JTextField();
 
-        Object[] fields = {
-            "Title", textTitle,
-            "Artist", textArtist,
-            "Album", textAlbum,
-            "Track", textTrack,
-            "Length", new Object[] {
-                "Minutes", textLengthMin,
-                "Seconds", textLengthSec
-            }
-        };
+            Object[] fields = {
+                "Title", textTitle,
+                "Artist", textArtist,
+                "Album", textAlbum,
+                "Track", textTrack,
+                "Length", new Object[] {
+                    "Minutes", textLengthMin,
+                    "Seconds", textLengthSec
+                }
+            };
 
-        do{
-            int n = JOptionPane.showConfirmDialog(null, fields, "New Song", JOptionPane.OK_CANCEL_OPTION);
+            do{
+                /*Display the new song input dialog */
+                int n = JOptionPane.showConfirmDialog(null, fields, "New Song", JOptionPane.OK_CANCEL_OPTION);
 
-            if (n == JOptionPane.OK_OPTION) {
-                if (textTitle.getText().equals("") || textArtist.getText().equals("")) {
+                if (n == JOptionPane.OK_OPTION) {
+                    if (textTitle.getText().equals("") || textArtist.getText().equals("")) {
 
-                    JOptionPane.showMessageDialog(null, "Please input a Title and Artist", "error", JOptionPane.WARNING_MESSAGE);
-                    success = false;
+                        JOptionPane.showMessageDialog(null, "Please input a Title and Artist", "error", JOptionPane.WARNING_MESSAGE);
+                        success = false;
 
-                }  
-                else{
-                    nTitle = textTitle.getText();
-                    nArtist = textArtist.getText();
-                    
-                    if (!textAlbum.getText().equals("")){
-                        nAlbum = textAlbum.getText();
-                    }
-
-
-                    if (!textTrack.getText().equals("")){
-                        try{
-                            nTrack = Integer.parseInt(textTrack.getText());
+                    }  
+                    else{
+                        nTitle = textTitle.getText();
+                        nArtist = textArtist.getText();
+                        
+                        if (!textAlbum.getText().equals("")){
+                            nAlbum = textAlbum.getText();
                         }
-                        catch(Exception e){
-                            success = false;
-                            JOptionPane.showMessageDialog(null, "Please enter a valid input for 'Track Number'", "error", JOptionPane.WARNING_MESSAGE);
-                        }
-                    }
 
-                    if (!textLengthSec.getText().equals("") || !textLengthMin.getText().equals("")) {
 
-                        nLength = 0;
-
-                        if (!textLengthMin.getText().equals("")){
+                        if (!textTrack.getText().equals("")){
                             try{
-                                nLength += 60*Integer.parseInt(textLengthMin.getText());
+                                nTrack = Integer.parseInt(textTrack.getText());
                             }
                             catch(Exception e){
                                 success = false;
-                                JOptionPane.showMessageDialog(null, "Please enter a valid input for 'Minutes'", "error", JOptionPane.WARNING_MESSAGE);
-                            }
-                        }
-                        if (!textLengthSec.getText().equals("")){
-                            try{
-                                nLength += Integer.parseInt(textLengthSec.getText());
-                            }
-                            catch(Exception e){
-                                success = false;
-                                JOptionPane.showMessageDialog(null, "Please enter a valid input for 'Seconds'", "error", JOptionPane.WARNING_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Please enter a valid input for 'Track Number'", "error", JOptionPane.WARNING_MESSAGE);
                             }
                         }
 
+                        if (!textLengthSec.getText().equals("") || !textLengthMin.getText().equals("")) {
+
+                            nLength = 0;
+
+                            if (!textLengthMin.getText().equals("")){
+                                try{
+                                    nLength += 60*Integer.parseInt(textLengthMin.getText());
+                                }
+                                catch(Exception e){
+                                    success = false;
+                                    JOptionPane.showMessageDialog(null, "Please enter a valid input for 'Minutes'", "error", JOptionPane.WARNING_MESSAGE);
+                                }
+                            }
+                            if (!textLengthSec.getText().equals("")){
+                                try{
+                                    nLength += Integer.parseInt(textLengthSec.getText());
+                                }
+                                catch(Exception e){
+                                    success = false;
+                                    JOptionPane.showMessageDialog(null, "Please enter a valid input for 'Seconds'", "error", JOptionPane.WARNING_MESSAGE);
+                                }
+                            }
+
+                        }
                     }
                 }
+                else {
+                    cancel = true;
+                }
+            /*If the user didn't input valid data, or the user didn't cancel the operation, repeat */
+            }while (success == false && cancel == false);
+
+            if (this.currentPlaylist.addSong(new Song(nTitle,nArtist,nAlbum,nTrack,nLength))) {
+                JOptionPane.showMessageDialog(null, "A new song has been added to the playlist", "Sucess", JOptionPane.INFORMATION_MESSAGE);
+                /*Update the table with the new song */
+                this.updateTable();
             }
             else {
-                cancel = true;
+                JOptionPane.showMessageDialog(null, "Unable to add song to the playlist", "ERROR", JOptionPane.ERROR_MESSAGE);
             }
-        }while (success == false && cancel == false);
-
-        if (this.currentPlaylist.addSong(new Song(nTitle,nArtist,nAlbum,nTrack,nLength))) {
-            JOptionPane.showMessageDialog(null, "A new song has been added to the playlist", "Sucess", JOptionPane.INFORMATION_MESSAGE);
-            this.updateTable();
         }
         else {
-            JOptionPane.showMessageDialog(null, "Unable to add song to the playlist", "ERROR", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,"No currently open playlist.");
         }
-    }//GEN-LAST:event_menuIAddSongActionPerformed
+    }                                            
 
+    /**
+     * called to delete a song from the playlist
+     */
+    private void deleteSong(){
+
+        if (this.currentPlaylist != null){
+            Vector<String> choicesVector = new Vector<>(0);
+            Song currentSong;
+            int selectedIndex;
+
+            /*Get a list of every song on the playlist */
+            for (int i = 0; i < this.currentPlaylist.getSongList().size(); i++){
+
+                /*A vector is used for dynamic resizing */
+                currentSong = this.currentPlaylist.getSongList().get(i);
+
+                choicesVector.add( (i+1) + " - " + currentSong.getTitle() + " - " + currentSong.getArtist());
+
+            }
+
+            /*The  Vector must be converted to an array for use later*/
+            String[] choices =  choicesVector.toArray(new String[choicesVector.size()]);
+
+            /*Display the dialog box with drop down menu */
+            String n = (String) JOptionPane.showInputDialog(this, "Choose a song to delete:", "Delete Song", JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
+
+            /*Extract the index from the users choice*/
+            String input = n.split(" - ")[0];
+            selectedIndex = Integer.parseInt(input) - 1;
+
+            /*remove the song at the selected index */
+            if (this.currentPlaylist.removeSong(selectedIndex)){
+                JOptionPane.showMessageDialog(null, "Song removed from the playlist", "Sucess", JOptionPane.INFORMATION_MESSAGE);
+                /*update the table to reflect the removed song */
+                this.updateTable();
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Unable to remove song from the playlist", "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(null,"No currently open playlist.");
+        }
+
+    }
+
+    /**
+     * Called to update the jTable with new songs
+     */
     public void updateTable(){
 
         Vector<Song> nSongData = this.currentPlaylist.getSongList();
@@ -328,87 +416,115 @@ public class PlaylistJFrame extends javax.swing.JFrame {
 
         DefaultTableModel nPlaylistData = new DefaultTableModel(playlistTblHeads, 0);
 
+        /*for each Song in the Playlist */
         for (int i = 0; i < nSongData.size(); i++){
             
             currentSong = nSongData.get(i);
-            currentLength = Integer.toString(currentSong.getLength()/60) + ":" + Integer.toString(currentSong.getLength()%60);
-            nPlaylistData.addRow(new String[] {currentSong.getTitle(), currentSong.getArtist(), currentSong.getAlbum(), Integer.toString(currentSong.getTrackNum()), currentLength});
+            /*format the length value into m:ss */
+            currentLength = Integer.toString(currentSong.getLength()/60) + ":" + String.format("%02d", currentSong.getLength()%60);
+            /*append the tablemodel with the next song data */
+            nPlaylistData.addRow(new String[] {Integer.toString(i+1), currentSong.getTitle(), currentSong.getArtist(), currentSong.getAlbum(), Integer.toString(currentSong.getTrackNum()), currentLength});
         }
 
         this.tblPlaylist.setModel(nPlaylistData);
 
     }
     
-    public void savePlaylistAs(){
+    /**
+     * Called to save the current playlist, by choosing a filename and directory
+     */
+    public void savePlaylist(){
         
-        final JFileChooser fc = new JFileChooser();
-        fc.setFileFilter(this.fileFilter);
-        fc.addChoosableFileFilter(this.fileFilter);
-        fc.setSelectedFile(new File(currentPlaylist.getName()));
-        fc.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY);
+        if (this.currentPlaylist != null){
+            JFileChooser fc = new JFileChooser();
+            fc.setFileFilter(this.fileFilter);
+            fc.addChoosableFileFilter(this.fileFilter);
+            fc.setSelectedFile(new File(currentPlaylist.getName()+".csv"));
 
-        int n = fc.showSaveDialog(null);
+            /* Use the JFileChooser to pick the name and directory of the new file */
+            int n = fc.showSaveDialog(null);
 
-        if (n == JFileChooser.APPROVE_OPTION) {
-            
-            File savedPlaylist = fc.getSelectedFile();
+            if (n == JFileChooser.APPROVE_OPTION) {
+                
+                File savedPlaylist = fc.getSelectedFile();
 
-            try{
-
-                if (savedPlaylist.createNewFile()) {
+                try{
                     
-                    savePlaylist(savedPlaylist);
+                    /*if the file doesn't already exist in that directory */
+                    if (savedPlaylist.createNewFile()) {
+                        
+                        savePlaylist(savedPlaylist);
 
+                    } 
+                    else {
+                        JOptionPane.showMessageDialog(null,"File already exists.");
+                    }
                 } 
-                else {
-                    JOptionPane.showMessageDialog(null,"File already exists.");
+                catch (IOException e) {
+                    JOptionPane.showMessageDialog(null,"Error creating new playlist file.");
+                    e.printStackTrace();
+        
                 }
-            } 
-            catch (IOException e) {
-                JOptionPane.showMessageDialog(null,"Error creating new playlist file.");
-                e.printStackTrace();
-    
-            }
 
+            }
+        }
+        else{
+            JOptionPane.showMessageDialog(null,"No currently open playlist.");
         } 
 
 
     }
 
+    /**
+     * Called to save the current playlist, to an existing file
+     * Overloads savePlaylist()
+     * @param playlistFile The existing file the playlist will be saved to
+     */
     public void savePlaylist(File playlistFile){
 
-        try{
-            FileWriter playlistWriter = new FileWriter(playlistFile);
-            playlistWriter.write(currentPlaylist.getName()+",\n");
+        if (playlistFile != null) {
+            try{
+                FileWriter playlistWriter = new FileWriter(playlistFile);
+                /*First line is always the playlist's name */
+                playlistWriter.write(currentPlaylist.getName()+",\n");
 
-            StringBuilder songData = new StringBuilder();
+                StringBuilder songData = new StringBuilder();
 
-            for (int i = 0; i < currentPlaylist.getSongList().size(); i++){
+                /*For each song in the playlist */
+                for (int i = 0; i < currentPlaylist.getSongList().size(); i++){
 
-                songData.append(currentPlaylist.getSongList().get(i).getTitle());
-                songData.append(',');
-                songData.append(currentPlaylist.getSongList().get(i).getArtist());
-                songData.append(',');
-                songData.append(currentPlaylist.getSongList().get(i).getAlbum());
-                songData.append(',');
-                songData.append(currentPlaylist.getSongList().get(i).getTrackNum());
-                songData.append(',');
-                songData.append(currentPlaylist.getSongList().get(i).getLength());
-                songData.append(',');
-                songData.append("\n");
+                    /*write the song data, separated by commas */
+                    songData.append(currentPlaylist.getSongList().get(i).getTitle());
+                    songData.append(',');
+                    songData.append(currentPlaylist.getSongList().get(i).getArtist());
+                    songData.append(',');
+                    songData.append(currentPlaylist.getSongList().get(i).getAlbum());
+                    songData.append(',');
+                    songData.append(currentPlaylist.getSongList().get(i).getTrackNum());
+                    songData.append(',');
+                    songData.append(currentPlaylist.getSongList().get(i).getLength());
+                    songData.append(',');
+                    songData.append("\n");
 
+                }
+
+                playlistWriter.write(songData.toString());
+            
+                playlistWriter.close();
             }
-
-            playlistWriter.write(songData.toString());
-        
-            playlistWriter.close();
+            catch (IOException e) {
+                JOptionPane.showMessageDialog(null,"Error when writing file.");
+                e.printStackTrace();
+            }
         }
-        catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
+        else {
+            JOptionPane.showMessageDialog(null,"No currently open file.");
         }
     }
 
+    /**
+     * Called to open a playlist file using JFileChooser
+     */
     public void openPlaylist(){
 
         String nName = "";
@@ -416,8 +532,8 @@ public class PlaylistJFrame extends javax.swing.JFrame {
         String line;
         ArrayList<String> lineList = new ArrayList<>();
         
-
         final JFileChooser fc = new JFileChooser();
+        /*filter the files to only .CSV*/
         fc.setFileFilter(this.fileFilter);
         fc.addChoosableFileFilter(this.fileFilter);
 
@@ -431,11 +547,14 @@ public class PlaylistJFrame extends javax.swing.JFrame {
 
                 BufferedReader playlistReader = new BufferedReader(new FileReader(playlistFile));
 
+                /*read the first line, storing it as the playlist name */
                 line = playlistReader.readLine().replaceAll(",", "");
                 nName = line;
                 
+                /* while there are lines left to read */
                 while (line != null) {
 
+                    /*read the lines into an arraylist */
                     line = playlistReader.readLine();
                     lineList.add(line);
 
@@ -449,16 +568,23 @@ public class PlaylistJFrame extends javax.swing.JFrame {
                 e.printStackTrace();
             }
 
+            /*Update the currently open file */
             this.currentPlaylistFile = playlistFile;
 
             nSongList = this.threadedPlaylistMaker(lineList);
 
-            this.displayNewPlaylist(new Playlist(nName, nSongList));
+            /*Replace the old playlist with the new one */
+            this.setNewPlaylist(new Playlist(nName, nSongList));
 
         }
 
     }
 
+    /**
+     * Called to read a arraylist, containing strings of song data to be formatted
+     * uses multithreaded, batch processing to compute 5 songs at a time
+     * @param songDataArrayList the arraylist containing songdata, each formatted as "title,artist,album,tracknum,length"
+     */
     private Vector<Song> threadedPlaylistMaker(ArrayList<String> songDataArrayList){
 
         Vector<Song> buildingSongList = new Vector<>(0);
@@ -475,16 +601,18 @@ public class PlaylistJFrame extends javax.swing.JFrame {
         SongReadTask songTask4;
         SongReadTask songTask5;
 
+        /*Add each string to a queue */
         BlockingQueue<String> lineQueue = new LinkedBlockingQueue<>(Integer.MAX_VALUE); //unbound queue
         for (int i = 0; i <= songDataArrayList.size()-2; ++i){
             lineQueue.add(songDataArrayList.get(i));
         }
 
+        /*while there a re strings left in the queue */
         while (lineQueue.size() > 0) {
 
-
+            
             if (lineQueue.size() >= 5){
-
+                /*take the next 5 strings and assign each their own thread */
                 songTask1 =new SongReadTask(lineQueue.poll()); songThread1 = new Thread(songTask1); 
                 songThread1.start();
                 songTask2 =new SongReadTask(lineQueue.poll()); songThread2 = new Thread(songTask2); 
@@ -497,11 +625,14 @@ public class PlaylistJFrame extends javax.swing.JFrame {
                 songThread5.start();
                 
                 try {
-                songThread1.join(); buildingSongList.addElement(songTask1.getSong());
-                songThread2.join(); buildingSongList.addElement(songTask2.getSong());
-                songThread3.join(); buildingSongList.addElement(songTask3.getSong());
-                songThread4.join(); buildingSongList.addElement(songTask4.getSong());
-                songThread5.join(); buildingSongList.addElement(songTask5.getSong());
+                    
+                    /*get the completed songs back from each thread */
+                    /*processing takes as long as the slowest thread */
+                    songThread1.join(); buildingSongList.addElement(songTask1.getSong());
+                    songThread2.join(); buildingSongList.addElement(songTask2.getSong());
+                    songThread3.join(); buildingSongList.addElement(songTask3.getSong());
+                    songThread4.join(); buildingSongList.addElement(songTask4.getSong());
+                    songThread5.join(); buildingSongList.addElement(songTask5.getSong());
 
                 }
                 catch (InterruptedException e){
@@ -511,6 +642,7 @@ public class PlaylistJFrame extends javax.swing.JFrame {
                 }
                 
             }
+            /*if there are less than 5 strings left, process them sequentially */
             else{
                     
                 songTask1 =new SongReadTask(lineQueue.poll()); songThread1 = new Thread(songTask1); 
@@ -580,6 +712,7 @@ public class PlaylistJFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblPlaylistName;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenuItem menuDeleteSong;
     private javax.swing.JMenuItem menuIAddSong;
     private javax.swing.JMenuItem menuINew;
     private javax.swing.JMenuItem menuIOpen;

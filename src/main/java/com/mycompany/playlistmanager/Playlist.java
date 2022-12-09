@@ -40,15 +40,27 @@ public class Playlist implements IPlaylist {
     @Override
     public boolean addSong(Song nSong) {
 
-        this.songList.addElement(nSong);
-        return true;
-        
+        try{
+            this.songList.addElement(nSong);
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
+
     }
 
     @Override
     public boolean removeSong(int position) {
 
-        return false;
+        try{
+            songList.remove(position);
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
+
     }
 
     @Override
